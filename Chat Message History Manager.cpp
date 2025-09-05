@@ -101,6 +101,10 @@ public:
         sentMessages.push(redone);
         cout << "Redo: \"" << redone.text << "\" re-sent.\n";
     }
+
+    // Getter for sentMessages
+    bool hasSentMessage() const { return !sentMessages.empty(); }
+    Message getLastSentMessage() const { return sentMessages.top(); }
 };
 
 // ------------------ Main ------------------
@@ -130,9 +134,12 @@ int main() {
                 chat.sendMessage(text);
                 break;
             case 2:
-                cout << "Enter message to receive: ";
-                getline(cin, text);
-                chat.receiveMessage(text);
+                if(chat.hasSentMessage()) {
+                    Message lastSent = chat.getLastSentMessage();
+                    chat.receiveMessage(lastSent.text);
+                } else {
+                    cout << "No sent message to receive.\n";
+                }
                 break;
             case 3:
                 chat.showInbox();
